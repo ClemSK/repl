@@ -1,8 +1,8 @@
-# repl
+# Repl
 
-Repl CLI app in Go
+CLI app in Go
 
-Learning objectives
+### Learning objectives
 
 - Parsing JSON in Go
 - Making HTTP requests in Go
