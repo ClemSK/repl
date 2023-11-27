@@ -1,16 +1,20 @@
 package main
 
-import "github.com/ClemSK/repl/internal/api"
+import (
+	"time"
+
+	"github.com/ClemSK/repl/internal/api"
+)
 
 type config struct {
 	pokeApiClient       api.Client
 	nextLocationAreaUrl *string
-	// prevLocationAreaUrl *string
+	prevLocationAreaUrl *string
 }
 
 func main() {
 	cfg := config{
-		pokeApiClient: api.NewClient(),
+		pokeApiClient: api.NewClient(5 * time.Second),
 	}
 	startRepl(&cfg)
 }
