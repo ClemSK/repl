@@ -25,7 +25,7 @@ func startRepl(cfg *config) { // sharing access to a config struct to avoid copy
 		if exists {
 			err := command.callback(cfg)
 			if err != nil {
-				fmt.Print(err)
+				fmt.Println(err)
 			}
 			continue
 		} else {
@@ -52,14 +52,14 @@ func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
 		"map": {
 			name:        "map",
-			description: "Lists location areas",
+			description: "Lists the next page of location areas",
 			callback:    commandMap,
 		},
-		// "mapb": {
-		// 	name:        "mapb",
-		// 	description: "Displays the previous 20 location areas",
-		// 	callback:    commandMapb,
-		// },
+		"mapb": {
+			name:        "mapb",
+			description: "Lists the previous page of location areas",
+			callback:    commandMapb,
+		},
 		"help": {
 			name:        "help",
 			description: "Displays a help message",
