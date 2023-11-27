@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func startRepl() {
+func startRepl(cfg *config) { // sharing access to a config struct to avoid copying state
 	reader := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -23,7 +23,7 @@ func startRepl() {
 		command, exists := getCommands()[commandName]
 
 		if exists {
-			err := command.callback()
+			err := command.callback(cfg)
 			if err != nil {
 				fmt.Print(err)
 			}
@@ -45,11 +45,21 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"map": {
+			name:        "map",
+			description: "Lists location areas",
+			callback:    commandMap,
+		},
+		// "mapb": {
+		// 	name:        "mapb",
+		// 	description: "Displays the previous 20 location areas",
+		// 	callback:    commandMapb,
+		// },
 		"help": {
 			name:        "help",
 			description: "Displays a help message",
