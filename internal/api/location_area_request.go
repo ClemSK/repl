@@ -15,6 +15,8 @@ func (c *Client) ListLocationAreas(pageUrl *string) (LocationAreasResponse, erro
 		fullUrl = *pageUrl
 	}
 
+	// check the cache here
+
 	// request
 	req, err := http.NewRequest("GET", fullUrl, nil)
 	if err != nil {
