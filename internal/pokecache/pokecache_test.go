@@ -1,4 +1,4 @@
-package cache
+package pokecache
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 
 func TestCreateCache(t *testing.T) {
 	cache := NewCache(time.Millisecond)
-	if cache.cache == nil {
+	if cache.pokecache == nil {
 		t.Error("cache is nil")
 	}
 }

@@ -1,9 +1,9 @@
-package cache
+package pokecache
 
 import "time"
 
 type Cache struct {
-	cache map[string]cacheEntry
+	pokecache map[string]cacheEntry
 }
 
 type cacheEntry struct {
@@ -13,21 +13,21 @@ type cacheEntry struct {
 
 func NewCache(interval time.Duration) Cache {
 	c := Cache{
-		cache: make(map[string]cacheEntry), // how we make a new cache
+		pokecache: make(map[string]cacheEntry), // how we make a new cache
 	}
 	go c.reapLoop(interval) // happens in a separate go routine, otherwise will never execute
 	return c
 }
 
 func (c *Cache) Add(key string, val []byte) {
-	c.cache[key] = cacheEntry{
+	c.pokecache[key] = cacheEntry{
 		val:       val,
 		createdAt: time.Now().UTC(),
 	}
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
-	cacheE, ok := c.cache[key]
+	cacheE, ok := c.pokecache[key]
 	return cacheE.val, ok
 }
 
@@ -41,9 +41,9 @@ func (c *Cache) reapLoop(interval time.Duration) {
 
 func (c *Cache) reap(interval time.Duration) {
 	cacheTimeout := time.Now().UTC().Add(-interval) // setting a negative interval gets time in the past
-	for k, v := range c.cache {
+	for k, v := range c.pokecache {
 		if v.createdAt.Before(cacheTimeout) {
-			delete(c.cache, k)
+			delete(c.pokecache, k)
 		}
 	}
 }
