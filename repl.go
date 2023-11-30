@@ -13,17 +13,21 @@ func startRepl(cfg *config) { // sharing access to a config struct to avoid copy
 		fmt.Print("Pokedex > ")
 		reader.Scan()
 
-		words := cleanInput(reader.Text())
-		if len(words) == 0 {
+		cleaned := cleanInput(reader.Text())
+		if len(cleaned) == 0 {
 			continue
 		}
 
-		commandName := words[0]
+		commandName := cleaned[0]
 
 		command, exists := getCommands()[commandName]
+		args := []string{}
+		if len(cleaned) > 1 {
+			args = cleaned[1:]
+		}
 
 		if exists {
-			err := command.callback(cfg)
+			err := command.callback(cfg, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -38,18 +42,23 @@ func startRepl(cfg *config) { // sharing access to a config struct to avoid copy
 
 func cleanInput(text string) []string {
 	output := strings.ToLower(text)
-	words := strings.Fields(output)
-	return words
+	cleaned := strings.Fields(output)
+	return cleaned
 }
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
 	return map[string]cliCommand{
+		"explore": {
+			name:        "explore {location_area}",
+			description: "Lists the pokemon in a location areas",
+			callback:    commandExplore,
+		},
 		"map": {
 			name:        "map",
 			description: "Lists the next page of location areas",

@@ -67,7 +67,7 @@ func (c *Client) ListLocationAreas(pageUrl *string) (LocationAreasResponse, erro
 }
 
 func (c *Client) GetLocationArea(locationAreaName string) (LocationArea, error) {
-	endpoint := "/location-area" + locationAreaName
+	endpoint := "/location-area/" + locationAreaName
 	fullUrl := baseUrl + endpoint
 
 	// check the cache
