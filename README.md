@@ -1,6 +1,6 @@
 # Repl
 
-CLI app in Go
+CLI app in Go that fetches data from an API and displays it in the terminal.
 
 ### Learning objectives
 
@@ -12,6 +12,19 @@ CLI app in Go
 ### API data
 
 The project uses the Locations and Pokemon endpoints of the [PokeApi](https://pokeapi.co/docs/v2#pokemon-section)
+
+### Repl commands
+
+| Commands                | Description                                           |
+| ----------------------- | ----------------------------------------------------- |
+| map                     | Lists the next page of location areas                 |
+| mapb                    | Lists the previous page of location areas             |
+| explore {location_area} | Lists the pokemons in a location areas                |
+| catch {pokemon_name}    | Attempt to catch a pokemon and add it to your pokedex |
+| inspect {pokemon_name}  | View info about a caught pokemon                      |
+| pokedex                 | View all the pokemon in your pokedex                  |
+| help                    | Displays a help message and lists available commands  |
+| exit                    | Exit the pokedex                                      |
 
 ### To run
 
