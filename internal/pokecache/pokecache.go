@@ -1,9 +1,13 @@
 package pokecache
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type Cache struct {
 	pokecache map[string]cacheEntry
+	mux       *sync.Mutex
 }
 
 type cacheEntry struct {
@@ -14,12 +18,15 @@ type cacheEntry struct {
 func NewCache(interval time.Duration) Cache {
 	c := Cache{
 		pokecache: make(map[string]cacheEntry), // how we make a new cache
+		mux:       &sync.Mutex{},
 	}
 	go c.reapLoop(interval) // happens in a separate go routine, otherwise will never execute
 	return c
 }
 
 func (c *Cache) Add(key string, val []byte) {
+	c.mux.Lock() // locks the protected resource to prevent concurrency issues
+	defer c.mux.Unlock()
 	c.pokecache[key] = cacheEntry{
 		val:       val,
 		createdAt: time.Now().UTC(),
@@ -27,6 +34,8 @@ func (c *Cache) Add(key string, val []byte) {
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
 	cacheE, ok := c.pokecache[key]
 	return cacheE.val, ok
 }
@@ -40,6 +49,8 @@ func (c *Cache) reapLoop(interval time.Duration) {
 }
 
 func (c *Cache) reap(interval time.Duration) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
 	cacheTimeout := time.Now().UTC().Add(-interval) // setting a negative interval gets time in the past
 	for k, v := range c.pokecache {
 		if v.createdAt.Before(cacheTimeout) {
